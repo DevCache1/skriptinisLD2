@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About</title>
     <link rel="stylesheet" href="./style.css">
+    <style>
+        .form-container {
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .form-container div {
+            margin-bottom: 10px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -20,24 +34,95 @@
     <div class="comment">
         <p>Esu Jonas, studijuoju Vilnius TECH ir gyvenu kinijoje. Laisvalaikiu pardavinėjų žąsis ir uždirbtus pinigus investuoju į dramblius. Turiu telekomunikacijų išsilavinimą, tačiau į bokštus aukštalipio pažymėjimo taip ir neišsilaikau.</p>
     </div>
+
+    <div class="form-container">
+        <h3>Kontaktų Forma</h3>
+        <div><input type="text" id="firstName" placeholder="Vardas"></div>
+        <div><input type="text" id="lastName" placeholder="Pavardė"></div>
+        <div><input type="email" id="email" placeholder="El. paštas"></div>
+        <div><input type="text" id="phone" placeholder="Telefono numeris"></div>
+        <div><input type="text" id="address" placeholder="Adresas"></div>
+        <div><input type="number" id="feature1" placeholder="Požymis 1"></div>
+        <div><input type="number" id="feature2" placeholder="Požymis 2"></div>
+        <div><input type="number" id="feature3" placeholder="Požymis 3"></div>
+        <div><input type="number" id="feature4" placeholder="Požymis 4"></div>
+        <div><input type="number" id="feature5" placeholder="Požymis 5"></div>
+        <button onclick="submitForm()">Siųsti</button>
+    </div>
     
-    <div id="clock"></div>
-
+    <div id="result"></div>
+    
     <script>
-        function updateClock() {
-            const now = new Date();
-            let hours = String(now.getHours()).padStart(2, '0');
-            let minutes = String(now.getMinutes()).padStart(2, '0');
-            let seconds = String(now.getSeconds()).padStart(2, '0');
-            const timeString = `${hours}:${minutes}:${seconds}`;
+        function submitForm() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
             
-            document.getElementById('clock').textContent = timeString;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Įveskite teisingą el. pašto adresą.");
+                return;
+            }
+            
+            const phoneRegex = /^\d+$/;
+            if (!phoneRegex.test(phone)) {
+                alert("Telefono numeris turi būti sudarytas tik iš skaitmenų.");
+                return;
+            }
+    
+            if (address === "") {
+                alert("Įveskite adresą.");
+                return;
+            }
+    
+            const features = [];
+            for (let i = 1; i <= 5; i++) {
+                const featureValue = Number(document.getElementById(`feature${i}`).value);
+                if (isNaN(featureValue)) {
+                    alert(`Požymis ${i} turi būti skaičius.`);
+                    return;
+                }
+                features.push(featureValue);
+            }
+            
+            const averageFeature = features.reduce((a, b) => a + b, 0) / features.length;
+    
+            const userInfo = {
+                firstName,
+                lastName,
+                email,
+                phone,
+                address,
+                features,
+                averageFeature
+            };
+    
+            console.log(userInfo);
+    
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <p>Vardas: ${userInfo.firstName}</p>
+                <p>Pavardė: ${userInfo.lastName}</p>
+                <p>El. paštas: ${userInfo.email}</p>
+                <p>Telefonas: ${userInfo.phone}</p>
+                <p>Adresas: ${userInfo.address}</p>
+                ${userInfo.features.map((feature, index) => `<p>Požymis ${index + 1}: ${feature}</p>`).join('')}
+                <p id="average">Požymių vidurkis: ${userInfo.averageFeature.toFixed(2)}</p>
+            `;
+    
+            const averageElement = document.getElementById('average');
+            if (averageFeature < 5) {
+                averageElement.style.color = "red";
+            } else if (averageFeature >= 5 && averageFeature <= 7) {
+                averageElement.style.color = "orange";
+            } else {
+                averageElement.style.color = "green";
+            }
         }
-
-        setInterval(updateClock, 1000);
-
-        updateClock();
     </script>
+    
     <footer>
         Martynas Baranskas EIRf-23
         <br>
