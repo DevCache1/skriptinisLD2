@@ -4,8 +4,38 @@
     font-family: "Prompt", serif;
     font-weight: 400;
     font-style: normal;
-    background-color: gray;
+    background-color: black;
     color: white;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0; 
+    margin-left: 20px;
+}
+
+footer {
+    padding: 10px;
+    margin-top: auto;
+    color: white;
+}
+
+header {
+    margin-top: 20px;
+}
+
+nav {
+    background-color: gray;
+}
+
+#logo {
+    max-width: 50px;
+}
+
+#social {
+    max-width: 30px;
 }
 
 .nav {
